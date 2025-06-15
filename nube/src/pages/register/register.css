@@ -1,0 +1,27 @@
+.register-form {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px;
+}
+
+.register-buttons-section {
+  max-width: 600px;
+  width: 100%;
+  padding: 10px;
+}
+
+.register-others {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.register-others-text {
+  width: 100%;
+  padding: 10px;
+}
+
+.register-main-actions-others {
+  width: 100%;
+}

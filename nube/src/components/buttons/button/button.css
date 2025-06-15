@@ -1,0 +1,31 @@
+.button-component {
+  background-color: var(--color);
+  color: var(--background-color);
+  min-width: 20ch;
+  border-radius: 2rem;
+  width: 100%;
+  min-height: 30px;
+}
+
+.button-component:hover,
+.button-component.secondary:hover {
+  background-color: var(--color-hover);
+}
+
+.button-component.secondary {
+  border: 1px solid var(--color);
+  background-color: transparent;
+  color: var(--color);
+}
+
+.button-component.secondary:hover {
+  border: 1px solid var(--background-color);
+  color: var(--background-color);
+}
+
+.button-component.link {
+  border: none;
+  background-color: transparent;
+  color: var(--color);
+  text-decoration: underline;
+}
