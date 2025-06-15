@@ -4,13 +4,37 @@ import "./log-in.css";
 import { Button } from "../../components/buttons/button/Button";
 import { ErrorComponent } from "../../components/inputs/input/components/error/Error";
 import { useNavigate } from "react-router";
+import { useAuthContext } from "../../context/AuthContext";
 
 export function LogIn() {
   const navigate = useNavigate();
+  const { logIn, registerWithProvider, signInError } = useAuthContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+
+  const handleLogIn = async () => {
+    if (email && password) {
+      await logIn(email, password);
+      if (!signInError) {
+        navigate("/profile");
+      }
+    }
+  };
+
+  const handleLogInWithGoogle = async () => {
+    await registerWithProvider("google");
+    if (!signInError) {
+      navigate("/profile");
+    }
+  };
+
+  const handleLogInWithFacebook = async () => {
+    await registerWithProvider("facebook");
+    if (!signInError) {
+      navigate("/profile");
+    }
+  };
 
   return (
     <div className="log-in-page page fccc">
@@ -23,11 +47,11 @@ export function LogIn() {
           setValue={setPassword}
           isSecret={true}
         />
-        {error && <ErrorComponent error={error} />}
+        {signInError && <ErrorComponent error={signInError} />}
       </div>
       <div className="log-in-buttons-section">
         <div className="log-in-main-actions fccc">
-          <Button label="Log in" />
+          <Button label="Log in" handleClick={handleLogIn} />
           <div className="log-in-main-actions-others frcc">
             <Button
               label="Forgot my password"
@@ -43,8 +67,16 @@ export function LogIn() {
         </div>
         <div className="log-in-others">
           <div className="log-in-others-text tcc">Or</div>
-          <Button label="Log in with Google" style="secondary" />
-          <Button label="Log in with Facebook" style="secondary" />
+          <Button
+            label="Log in with Google"
+            handleClick={handleLogInWithGoogle}
+            style="secondary"
+          />
+          <Button
+            label="Log in with Facebook"
+            handleClick={handleLogInWithFacebook}
+            style="secondary"
+          />
         </div>
       </div>
     </div>
