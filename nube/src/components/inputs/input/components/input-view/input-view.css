@@ -1,0 +1,21 @@
+.input-view-component {
+  width: 100%;
+  border: 1px solid var(--color);
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.input-view {
+  width: 100%;
+  padding: 10px;
+  border: none;
+}
+
+.input-view:focus {
+  outline: none;
+}
+
+.is-secret-button-change {
+  color: var(--background-color);
+  background-color: var(--color);
+}
