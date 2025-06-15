@@ -29,3 +29,7 @@
   color: var(--color);
   text-decoration: underline;
 }
+
+.button-component.error {
+  background-color: var(--error-color);
+}

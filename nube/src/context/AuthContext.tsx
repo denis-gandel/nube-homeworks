@@ -5,6 +5,8 @@ import {
   updateProfile,
   type AuthProvider as authProviderType,
   type User,
+  signOut,
+  linkWithPopup,
 } from "firebase/auth";
 import {
   createContext,
@@ -28,7 +30,9 @@ interface Type {
   registerWithProvider: (providerName: string) => Promise<void>;
   logIn: (email: string, password: string) => Promise<void>;
   signInError: string;
-  user: User | null
+  user: User | null;
+  logOut: () => Promise<void>;
+  linkProvider: (providerName: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<Type | undefined>(undefined);
@@ -99,13 +103,36 @@ export const AuthProvider = ({ children }: Props) => {
     }
   };
 
+  const logOut = async (): Promise<void> => {
+    await signOut(auth);
+    setUser(null);
+  };
+
+  const linkProvider = async (providerName: string): Promise<boolean> => {
+    const provider = providers.get(providerName);
+    if (!provider) throw new Error("Provider not found");
+
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("No user is currently logged in");
+
+      await linkWithPopup(user, provider);
+      return true;
+    } catch (error: any) {
+      console.error("Error linking provider:", error);
+      return false;
+    }
+  };
+
   const objValue = useMemo(
     () => ({
       register,
       registerWithProvider,
       logIn,
       signInError,
-      user
+      user,
+      logOut,
+      linkProvider,
     }),
     [signInError, user]
   );
