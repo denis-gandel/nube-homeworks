@@ -1,9 +1,9 @@
-import { useAuthContext } from "../../context/AuthContext";
-import UserDefault from "../../assets/img/user-default.png";
+import { useAuthContext } from "../../../context/AuthContext";
+import UserDefault from "../../../assets/img/user-default.png";
 import "./profile.css";
-import { Button } from "../../components/buttons/button/Button";
+import { Button } from "../../../components/buttons/button/Button";
 import { useNavigate } from "react-router";
-import { Input } from "../../components/inputs/input/Input";
+import { Input } from "../../../components/inputs/input/Input";
 import { useEffect } from "react";
 
 export function Profile() {
@@ -50,6 +50,7 @@ export function Profile() {
           width={300}
           height={300}
         />
+        <Button label="Go to posts" handleClick={() => navigate("/me/posts")} />
         <Input
           label="Full name"
           value={user?.fullName ?? "User name"}

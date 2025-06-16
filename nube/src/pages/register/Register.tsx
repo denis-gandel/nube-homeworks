@@ -18,17 +18,17 @@ export function Register() {
 
   const handleRegister = async () => {
     await register(name, email, password, birtDate, address, parseInt(age));
-    navigate("/profile");
+    navigate("/me");
   };
 
   const handleRegisterWithGoogle = async () => {
     await registerWithProvider("google");
-    navigate("/profile");
+    navigate("/me");
   };
 
   const handleRegisterWithFacebook = async () => {
     await registerWithProvider("facebook");
-    navigate("/profile");
+    navigate("/me");
   };
 
   return (

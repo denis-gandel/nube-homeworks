@@ -1,0 +1,36 @@
+.post-view-component {
+  width: 100%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: .6rem;
+  box-shadow: 0 4px 5px #00000050;
+  gap: 20px;
+}
+
+.post-header {
+  display: grid;
+  grid-template-columns: 100px auto;
+}
+
+.profile-img-post {
+  border-radius: 50%;
+}
+
+.post-info {
+  width: 100%;
+}
+
+.post-user-name {
+  color: var(--color);
+  font-size: 20px;
+}
+
+.post-publish-date {
+  font-size: 14px;
+  color: #00000090;
+}
+
+.text-post {
+  width: 100%;
+  padding: 10px;
+}

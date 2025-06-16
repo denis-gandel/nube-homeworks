@@ -3,7 +3,7 @@ import { Home } from "./pages/home/Home";
 import { LogIn } from "./pages/log-in/LogIn";
 import { Register } from "./pages/register/Register";
 import { AuthProvider } from "./context/AuthContext";
-import { Profile } from "./pages/profile/Profile";
+import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/log-in" element={<LogIn />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/me/*" element={<ProfileRoutes />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

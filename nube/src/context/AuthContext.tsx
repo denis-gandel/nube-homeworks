@@ -45,6 +45,7 @@ interface Type {
   logOut: () => Promise<void>;
   linkProvider: (providerName: string) => Promise<boolean>;
   nameProviders: Array<string>;
+  id: string;
 }
 
 const AuthContext = createContext<Type | undefined>(undefined);
@@ -245,8 +246,9 @@ export const AuthProvider = ({ children }: Props) => {
       logOut,
       linkProvider,
       nameProviders,
+      id,
     }),
-    [signInError, user, nameProviders]
+    [signInError, user, nameProviders, id]
   );
 
   return (
