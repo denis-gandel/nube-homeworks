@@ -1,0 +1,8 @@
+.delete-button-component {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.5rem;
+  background-color: #f00;
+  color: #fff;
+  cursor: pointer;
+}

@@ -1,0 +1,9 @@
+.my-posts-page {
+  padding: 1.5rem;
+}
+
+.my-posts-sections {
+  max-width: 1000px;
+  margin: auto;
+  gap: 20px;
+}

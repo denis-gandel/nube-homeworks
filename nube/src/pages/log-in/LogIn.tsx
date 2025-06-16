@@ -17,7 +17,7 @@ export function LogIn() {
     if (email && password) {
       await logIn(email, password);
       if (!signInError) {
-        navigate("/profile");
+        navigate("/me");
       }
     }
   };
@@ -25,14 +25,14 @@ export function LogIn() {
   const handleLogInWithGoogle = async () => {
     await registerWithProvider("google");
     if (!signInError) {
-      navigate("/profile");
+      navigate("/me");
     }
   };
 
   const handleLogInWithFacebook = async () => {
     await registerWithProvider("facebook");
     if (!signInError) {
-      navigate("/profile");
+      navigate("/me");
     }
   };
 

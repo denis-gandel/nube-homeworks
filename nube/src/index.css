@@ -102,6 +102,14 @@ button {
   gap: 10px;
 }
 
+.frcl {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: end;
+  gap: 10px;
+}
+
 .tcl {
   width: 100%;
   text-align: left;
