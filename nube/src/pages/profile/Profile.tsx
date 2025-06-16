@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 export function Profile() {
   const navigate = useNavigate();
-  const { user, logOut, linkProvider } = useAuthContext();
+  const { user, logOut, linkProvider, nameProviders } = useAuthContext();
 
   const handleLogOut = async () => {
     await logOut();
@@ -31,16 +31,20 @@ export function Profile() {
 
   useEffect(() => {
     if (!user) {
-      navigate("/log-in")
+      navigate("/log-in");
     }
-  }, [user])
+  }, [user]);
 
   return (
     <div className="profile-page page fccc">
       <h1>Profile</h1>
       <div className="profile-info-section fca">
         <img
-          src={user?.photoURL ?? UserDefault}
+          src={
+            user?.profileImg && user.profileImg.trim() !== ""
+              ? user.profileImg
+              : UserDefault
+          }
           alt="Profile"
           className="profile-img"
           width={300}
@@ -48,7 +52,7 @@ export function Profile() {
         />
         <Input
           label="Full name"
-          value={user?.displayName ?? "User name"}
+          value={user?.fullName ?? "User name"}
           setValue={() => {}}
           isEditable={false}
         />
@@ -59,8 +63,20 @@ export function Profile() {
           isEditable={false}
         />
         <Input
-          label="Creation date"
-          value={user?.metadata.creationTime ?? "Never"}
+          label="Birth date"
+          value={user?.birthDate ?? "Never"}
+          setValue={() => {}}
+          isEditable={false}
+        />
+        <Input
+          label="Age"
+          value={`${user?.age}`}
+          setValue={() => {}}
+          isEditable={false}
+        />
+        <Input
+          label="Address"
+          value={user?.address ?? "Av IDK"}
           setValue={() => {}}
           isEditable={false}
         />
@@ -78,9 +94,7 @@ export function Profile() {
         </div>
         <div className="profile-others">
           <div className="profile-others-text tcc">Link with</div>
-          {user?.providerData.some(
-            (provider) => provider.providerId === "google.com"
-          ) ? (
+          {nameProviders.includes("google.com") ? (
             <Button
               label="Linked to Google"
               handleClick={() => {}}
@@ -94,9 +108,7 @@ export function Profile() {
             />
           )}
 
-          {user?.providerData.some(
-            (provider) => provider.providerId === "facebook.com"
-          ) ? (
+          {nameProviders.includes("facebook.com") ? (
             <Button
               label="Linked to Facebook"
               handleClick={() => {}}
