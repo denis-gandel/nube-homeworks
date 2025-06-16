@@ -12,20 +12,23 @@ export function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [birtDate, setBirtDate] = useState("");
+  const [address, setAddress] = useState("");
+  const [age, setAge] = useState("");
 
   const handleRegister = async () => {
-    await register(name, email, password);
+    await register(name, email, password, birtDate, address, parseInt(age));
     navigate("/profile");
   };
 
   const handleRegisterWithGoogle = async () => {
     await registerWithProvider("google");
-    navigate("/profile")
+    navigate("/profile");
   };
 
   const handleRegisterWithFacebook = async () => {
     await registerWithProvider("facebook");
-    navigate("/profile")
+    navigate("/profile");
   };
 
   return (
@@ -38,8 +41,11 @@ export function Register() {
           label="Password"
           value={password}
           setValue={setPassword}
-          isSecret
+          isSecret={true}
         />
+        <Input label="Birt date" value={birtDate} setValue={setBirtDate} />
+        <Input label="Age" value={age} setValue={setAge} />
+        <Input label="Address" value={address} setValue={setAddress} />
       </div>
       <div className="register-buttons-section">
         <div className="register-main-actions fccc">

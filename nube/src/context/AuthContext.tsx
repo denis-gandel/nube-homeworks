@@ -4,18 +4,26 @@ import {
   signInWithPopup,
   updateProfile,
   type AuthProvider as authProviderType,
-  type User,
   signOut,
   linkWithPopup,
+  type User as userProviderType,
 } from "firebase/auth";
 import {
   createContext,
   type ReactNode,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
-import { auth, googleProvider, facebookProvider } from "../firebase/firebase";
+import {
+  auth,
+  googleProvider,
+  facebookProvider,
+  db,
+} from "../firebase/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { type User } from "../model/User";
 
 interface Props {
   children: ReactNode;
@@ -23,9 +31,12 @@ interface Props {
 
 interface Type {
   register: (
-    fullname: string,
+    fullName: string,
     email: string,
-    password: string
+    password: string,
+    birthDate: string,
+    address: string,
+    age: number
   ) => Promise<void>;
   registerWithProvider: (providerName: string) => Promise<void>;
   logIn: (email: string, password: string) => Promise<void>;
@@ -33,13 +44,16 @@ interface Type {
   user: User | null;
   logOut: () => Promise<void>;
   linkProvider: (providerName: string) => Promise<boolean>;
+  nameProviders: Array<string>;
 }
 
 const AuthContext = createContext<Type | undefined>(undefined);
 
 export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User | null>(null);
+  const [id, setId] = useState("");
   const [signInError, setSignInError] = useState("");
+  const [nameProviders, setNameProviders] = useState<Array<string>>([]);
 
   const providers = new Map<string, authProviderType>([
     ["google", googleProvider],
@@ -47,9 +61,12 @@ export const AuthProvider = ({ children }: Props) => {
   ]);
 
   const register = async (
-    fullname: string,
+    fullName: string,
     email: string,
-    password: string
+    password: string,
+    birthDate: string,
+    address: string,
+    age: number
   ) => {
     const credentials = await createUserWithEmailAndPassword(
       auth,
@@ -59,10 +76,17 @@ export const AuthProvider = ({ children }: Props) => {
     const user = credentials.user;
 
     if (user) {
-      setUser(user);
-      await updateProfile(user, {
-        displayName: fullname,
-      });
+      getProviders(user);
+      await saveData(
+        fullName,
+        email,
+        birthDate,
+        address,
+        age,
+        user.photoURL ?? "",
+        user,
+        user.uid
+      );
     }
   };
 
@@ -74,7 +98,9 @@ export const AuthProvider = ({ children }: Props) => {
         password
       );
       const user = credentials.user;
-      setUser(user);
+      if (user) {
+        setId(user.uid);
+      }
       setSignInError("");
     } catch (error: any) {
       switch (error.code) {
@@ -97,7 +123,20 @@ export const AuthProvider = ({ children }: Props) => {
       const provider = providers.get(providerName);
       if (!provider) throw new Error("Provider not found");
       const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
+      const user = result.user;
+      if (user) {
+        getProviders(user);
+        await saveData(
+          user.displayName ?? "",
+          user.email ?? "",
+          undefined,
+          undefined,
+          undefined,
+          user.photoURL ?? "",
+          user,
+          user.uid
+        );
+      }
     } catch (error) {
       console.error(error);
     }
@@ -115,6 +154,9 @@ export const AuthProvider = ({ children }: Props) => {
     try {
       const user = auth.currentUser;
       if (!user) throw new Error("No user is currently logged in");
+      if (user) {
+        setId(user.uid);
+      }
 
       await linkWithPopup(user, provider);
       return true;
@@ -123,6 +165,75 @@ export const AuthProvider = ({ children }: Props) => {
       return false;
     }
   };
+
+  const saveData = async (
+    fullName: string,
+    email: string,
+    birtDate?: string,
+    address?: string,
+    age?: number,
+    profileImg?: string,
+    providerUser?: userProviderType,
+    id?: string
+  ) => {
+    if (!id) return;
+
+    if (!providerUser) {
+      setSignInError("User not found");
+      return;
+    }
+
+    const user = {
+      fullName,
+      email,
+      birthDate: birtDate ?? "Never",
+      address: address ?? "Av IDK",
+      age: age ?? 0,
+      profileImg: profileImg ?? "",
+    };
+
+    if (user) {
+      setUser(user);
+      await updateProfile(providerUser, {
+        displayName: fullName,
+      });
+
+      await setDoc(doc(db, "users", id), {
+        fullName: user.fullName,
+        email: user.email,
+        birthDate: user.birthDate,
+        address: user.address,
+        age: user.age,
+        profileImg: user.profileImg,
+      });
+
+      setId(id);
+    }
+  };
+
+  const fetchData = async () => {
+    if (!id) return;
+
+    const docRef = doc(db, "users", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setUser(docSnap.data() as User);
+    } else {
+      console.log("No such document!");
+    }
+  };
+
+  const getProviders = async (user: userProviderType) => {
+    const currentProviders = user.providerData.map((provider) => {
+      return provider.providerId;
+    });
+    setNameProviders(currentProviders);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
 
   const objValue = useMemo(
     () => ({
@@ -133,8 +244,9 @@ export const AuthProvider = ({ children }: Props) => {
       user,
       logOut,
       linkProvider,
+      nameProviders,
     }),
-    [signInError, user]
+    [signInError, user, nameProviders]
   );
 
   return (
