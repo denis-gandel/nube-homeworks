@@ -18,6 +18,7 @@ export const CreatePost = () => {
         text: text,
         userId: id,
         publicationDate: serverTimestamp(),
+        medias: []
       };
 
       await addDoc(collection(db, "posts"), post);
