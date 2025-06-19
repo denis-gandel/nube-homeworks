@@ -6,6 +6,7 @@ import { db } from "../../../firebase/firebase";
 import { type User } from "../../../model/User";
 import UserDefaultImg from "../../../assets/img/user-default.png";
 import { DeleteButton } from "../../buttons/delete-button/DeleteButton";
+import { ViewMedia } from "../view-media/ViewMedia";
 
 interface Props {
   post: Post;
@@ -63,7 +64,10 @@ export const PostView = ({ post }: Props) => {
           </p>
         </div>
       </div>
-      <p className="text-post">{post.text}</p>
+      {post.text && <p className="text-post">{post.text}</p>}
+      {post.medias && post.medias?.length > 0 && (
+        <ViewMedia medias={post.medias} />
+      )}
       {post.userId === user?.id && (
         <DeleteButton handleClick={handleDeletePost} />
       )}

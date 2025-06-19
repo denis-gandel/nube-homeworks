@@ -15,3 +15,19 @@
   outline: none;
   background-color: transparent;
 }
+
+.create-post-buttons {
+  gap: 20px;
+}
+
+.create-post-more-action-button {
+  width: 60px;
+  height: 60px;
+  background-color: transparent;
+  color: var(--color);
+}
+
+.create-post-more-action-button:hover {
+  background-color: var(--background-color);
+  border-radius: 50%;
+}

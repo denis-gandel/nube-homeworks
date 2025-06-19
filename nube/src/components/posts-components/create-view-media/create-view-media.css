@@ -1,0 +1,14 @@
+.create-view-media-component {
+  max-height: 300px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+.create-view-media-component > img,
+.create-view-media-component > video {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
