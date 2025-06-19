@@ -1,0 +1,31 @@
+.upload-medias-pop-up-component {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin: auto;
+}
+
+.upload-medias-section {
+  margin-top: 1rem;
+}
+
+.file-preview-list {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.button-section {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}

@@ -5,27 +5,69 @@ import { useAuthContext } from "../../../context/AuthContext";
 import type { Post } from "../../../model/Post";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
+import { ImagePlus } from "lucide-react";
+import { usePopUpContext } from "../../../context/PopUpContext";
+import { UploadMediasPopUp } from "../../pop-ups/upload-medias-pop-up/UploadMediasPopUp";
+import { CreateViewMedia } from "../create-view-media/CreateViewMedia";
 
 export const CreatePost = () => {
   const { id } = useAuthContext();
+  const { setPopUp } = usePopUpContext();
   const [text, setText] = useState("");
+  const [medias, setMedias] = useState<File[]>([]);
 
   const handlePublish = async () => {
-    if (!text.trim()) return;
+    if (!text.trim() && medias.length === 0) return;
 
     try {
+      const links = await handleUploadMediaToCloudinary();
       const post: Post = {
         text: text,
         userId: id,
         publicationDate: serverTimestamp(),
-        medias: []
+        medias: links,
       };
 
       await addDoc(collection(db, "posts"), post);
       setText("");
+      setMedias([]);
     } catch (error) {
       console.error("Error al publicar:", error);
     }
+  };
+
+  const handleUploadMediaToCloudinary = async (): Promise<string[]> => {
+    const CLOUD_NAME = import.meta.env.VITE_CLOUD_NAME;
+    const UPLOAD_PRESET = import.meta.env.VITE_UPLOAD_PRESET;
+
+    const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`;
+
+    const uploadPromises = medias.map(async (media) => {
+      const formData = new FormData();
+      formData.append("upload_preset", UPLOAD_PRESET);
+      formData.append("file", media);
+
+      try {
+        const res = await fetch(UPLOAD_URL, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) {
+          console.error("Error al subir:", media.name);
+          return null;
+        }
+
+        const data = await res.json();
+        return data.secure_url;
+      } catch (error) {
+        console.error("Error en Cloudinary:", error);
+        return null;
+      }
+    });
+
+    const results = await Promise.all(uploadPromises);
+    return results.filter((url): url is string => url !== null);
   };
 
   return (
@@ -38,7 +80,18 @@ export const CreatePost = () => {
         className="input-text-post"
         placeholder="Write down your feelings..."
       ></textarea>
-      <div className="create-post-buttons frcl">
+      <CreateViewMedia medias={medias} />
+      <div className="create-post-buttons frcc">
+        <div className="create-post-more-actions">
+          <button
+            className="create-post-more-action-button fccc"
+            onClick={() =>
+              setPopUp(<UploadMediasPopUp setMedias={setMedias} />)
+            }
+          >
+            <ImagePlus />
+          </button>
+        </div>
         <Button label="Publish" handleClick={handlePublish} />
       </div>
     </div>

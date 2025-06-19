@@ -31,13 +31,15 @@ export const ViewMedia = ({ medias = [] }: Props) => {
 
   return (
     <div className="view-media-component">
-      <button
-        className="view-media-control fca view-media-control-left"
-        onClick={handleLeft}
-        disabled={position === 0}
-      >
-        <ChevronLeft />
-      </button>
+      {medias.length > 1 && position !== 0 && (
+        <button
+          className="view-media-control fca view-media-control-left"
+          onClick={handleLeft}
+          disabled={position === 0}
+        >
+          <ChevronLeft />
+        </button>
+      )}
       <div className="view-media-content">
         {media && isImage(media) && <img src={media} alt="Media" />}
         {media && isVideo(media) && (
@@ -45,18 +47,18 @@ export const ViewMedia = ({ medias = [] }: Props) => {
             Your browser does not support the video tag.
           </video>
         )}
-        {/* En caso de tipo no soportado */}
         {media && !isImage(media) && !isVideo(media) && (
           <p>Unsupported media type</p>
         )}
       </div>
-      <button
-        className="view-media-control fca view-media-control-right"
-        onClick={handleRight}
-        disabled={position === medias.length - 1}
-      >
-        <ChevronRight />
-      </button>
+      {medias.length > 1 && position !== medias.length - 1 && (
+        <button
+          className="view-media-control fca view-media-control-right"
+          onClick={handleRight}
+        >
+          <ChevronRight />
+        </button>
+      )}
     </div>
   );
 };

@@ -18,6 +18,10 @@ body {
   background-color: var(--background-color);
 }
 
+body.pop-up-active {
+  overflow: hidden;
+}
+
 ::selection {
   background-color: var(--color);
   color: var(--background-color);
@@ -123,4 +127,43 @@ button {
 .tcc {
   width: 100%;
   text-align: center;
+}
+
+.is-visible {
+  display: block;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.pop-up-component-container {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--background-color);
+  max-width: 800px;
+  max-height: 800px;
+  padding: 20px;
+  border-radius: 1rem;
+}
+
+.close-pop-up {
+  background-color: transparent;
+  border: none;
+  color: var(--error-color);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+@media (max-width: 800px) {
+  .pop-up-component-container {
+    max-width: 100%;
+    max-height: 100vh;
+    padding: 10px;
+    border-radius: 0;
+  }
 }
