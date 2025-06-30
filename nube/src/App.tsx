@@ -5,6 +5,7 @@ import { Register } from "./pages/register/Register";
 import { AuthProvider } from "./context/AuthContext";
 import { ProfileRoutes } from "./pages/profile/ProfileRoutes";
 import { PopUpProvider } from "./context/PopUpContext";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/me/*" element={<ProfileRoutes />} />
           </Routes>
+          <ToastContainer />
         </PopUpProvider>
       </AuthProvider>
     </BrowserRouter>

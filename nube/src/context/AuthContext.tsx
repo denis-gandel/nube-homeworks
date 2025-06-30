@@ -21,9 +21,12 @@ import {
   googleProvider,
   facebookProvider,
   db,
+  messaging,
 } from "../firebase/firebase";
+import { getToken, onMessage } from "firebase/messaging";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { type User } from "../model/User";
+import { toast } from "react-toastify";
 
 interface Props {
   children: ReactNode;
@@ -46,6 +49,7 @@ interface Type {
   linkProvider: (providerName: string) => Promise<boolean>;
   nameProviders: Array<string>;
   id: string;
+  tokenMessaging: string;
 }
 
 const AuthContext = createContext<Type | undefined>(undefined);
@@ -55,6 +59,9 @@ export const AuthProvider = ({ children }: Props) => {
   const [id, setId] = useState("");
   const [signInError, setSignInError] = useState("");
   const [nameProviders, setNameProviders] = useState<Array<string>>([]);
+  const [tokenMessaging, setTokenMessaging] = useState("");
+  const [notificationPermission, setNotificationPermission] =
+    useState("default");
 
   const providers = new Map<string, authProviderType>([
     ["google", googleProvider],
@@ -167,6 +174,36 @@ export const AuthProvider = ({ children }: Props) => {
     }
   };
 
+  const getMessagingToken = async () => {
+    if ("serviceWorker" in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.register(
+          "/firebase-messaging-sw.js"
+        );
+
+        const permission = await Notification.requestPermission();
+        setNotificationPermission(permission);
+
+        if (permission === "granted") {
+          const currentToken = await getToken(messaging, {
+            vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+            serviceWorkerRegistration: registration,
+          });
+
+          if (currentToken) {
+            setTokenMessaging(currentToken);
+          }
+        } else {
+          console.warn("Permiso de notificación denegado.");
+        }
+      } catch (err) {
+        console.error("Error al obtener token o registrar SW:", err);
+      }
+    } else {
+      console.warn("Service Workers no soportados en este navegador.");
+    }
+  };
+
   const saveData = async (
     fullName: string,
     email: string,
@@ -236,6 +273,38 @@ export const AuthProvider = ({ children }: Props) => {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    getMessagingToken();
+
+    const unsubscribeOnMessage = onMessage(messaging, (payload) => {
+      if (payload.notification) {
+        if (payload.data && payload.data.type === "post_status_update") {
+          if (payload.data.status === "success") {
+            toast.success(
+              `${payload.notification.title}: ${payload.notification.body}`
+            );
+          } else if (payload.data.status === "error") {
+            toast.error(
+              `${payload.notification.title}: ${payload.notification.body}`
+            );
+          } else {
+            toast.info(
+              `${payload.notification.title}: ${payload.notification.body}`
+            );
+          }
+        } else {
+          toast.info(
+            `${payload.notification.title}: ${payload.notification.body}`
+          );
+        }
+      }
+    });
+
+    return () => {
+      unsubscribeOnMessage();
+    };
+  }, []);
+
   const objValue = useMemo(
     () => ({
       register,
@@ -247,8 +316,9 @@ export const AuthProvider = ({ children }: Props) => {
       linkProvider,
       nameProviders,
       id,
+      tokenMessaging,
     }),
-    [signInError, user, nameProviders, id]
+    [signInError, user, nameProviders, id, tokenMessaging]
   );
 
   return (
