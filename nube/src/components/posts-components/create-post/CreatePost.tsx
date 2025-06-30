@@ -9,28 +9,39 @@ import { ImagePlus } from "lucide-react";
 import { usePopUpContext } from "../../../context/PopUpContext";
 import { UploadMediasPopUp } from "../../pop-ups/upload-medias-pop-up/UploadMediasPopUp";
 import { CreateViewMedia } from "../create-view-media/CreateViewMedia";
+import axios from "axios";
 
 export const CreatePost = () => {
-  const { id } = useAuthContext();
+  const { id, tokenMessaging } = useAuthContext();
   const { setPopUp } = usePopUpContext();
   const [text, setText] = useState("");
   const [medias, setMedias] = useState<File[]>([]);
 
   const handlePublish = async () => {
+    if (!tokenMessaging) return;
     if (!text.trim() && medias.length === 0) return;
 
     try {
       const links = await handleUploadMediaToCloudinary();
+      const currentDate = new Date();
       const post: Post = {
         text: text,
         userId: id,
-        publicationDate: serverTimestamp(),
+        publicationDate: currentDate.toISOString(),
         medias: links,
       };
 
-      await addDoc(collection(db, "posts"), post);
-      setText("");
-      setMedias([]);
+      const response = await axios.post(
+        "http://localhost:5000/mobile-dev-2025/us-central1/api/post",
+        {
+          data: post,
+          fcmToken: tokenMessaging,
+        }
+      );
+      if (response.status === 200) {
+        setText("");
+        setMedias([]);
+      }
     } catch (error) {
       console.error("Error al publicar:", error);
     }

@@ -57,11 +57,7 @@ export const PostView = ({ post }: Props) => {
         )}
         <div className="post-info">
           <b className="post-user-name">{user?.fullName ?? "User unknow"}</b>
-          <p className="post-publish-date">
-            {post.publicationDate
-              ? post.publicationDate.toDate().toLocaleString()
-              : "Fecha no disponible"}
-          </p>
+          <p className="post-publish-date">{post.publicationDate}</p>
         </div>
       </div>
       {post.text && <p className="text-post">{post.text}</p>}
