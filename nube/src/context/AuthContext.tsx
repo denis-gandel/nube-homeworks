@@ -55,13 +55,12 @@ interface Type {
 const AuthContext = createContext<Type | undefined>(undefined);
 
 export const AuthProvider = ({ children }: Props) => {
+  const [token, setToken] = useState("")
   const [user, setUser] = useState<User | null>(null);
   const [id, setId] = useState("");
   const [signInError, setSignInError] = useState("");
   const [nameProviders, setNameProviders] = useState<Array<string>>([]);
   const [tokenMessaging, setTokenMessaging] = useState("");
-  const [notificationPermission, setNotificationPermission] =
-    useState("default");
 
   const providers = new Map<string, authProviderType>([
     ["google", googleProvider],
@@ -182,7 +181,6 @@ export const AuthProvider = ({ children }: Props) => {
         );
 
         const permission = await Notification.requestPermission();
-        setNotificationPermission(permission);
 
         if (permission === "granted") {
           const currentToken = await getToken(messaging, {

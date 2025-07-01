@@ -5,3 +5,12 @@ export interface Post {
   userId: string;
   publicationDate: string;
 }
+
+export interface Reactions {
+  postId: string;
+  likes: string[];
+  dislikes: string[];
+  likesCount: number;
+  dislikesCount: number;
+}
+

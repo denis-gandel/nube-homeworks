@@ -5,6 +5,7 @@
   --color-hover: #0b72d8;
   --background-color: #f4f6ff;
   --error-color: #ff1012;
+  --success-color: #2de00a;
 }
 
 * {
@@ -111,6 +112,14 @@ button {
   flex-direction: row;
   justify-content: center;
   align-items: end;
+  gap: 10px;
+}
+
+.frcb {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   gap: 10px;
 }
 
