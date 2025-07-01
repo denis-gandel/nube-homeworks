@@ -34,3 +34,17 @@
   width: 100%;
   padding: 10px;
 }
+
+.post-view-reaction {
+  width: auto;
+  background-color: transparent;
+  color: var(--color-inactive);
+}
+
+.post-view-reaction.like.active {
+  color: var(--success-color);
+}
+
+.post-view-reaction.dislike.active {
+  color: var(--error-color);
+}
