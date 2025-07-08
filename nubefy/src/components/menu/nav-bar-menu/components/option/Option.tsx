@@ -19,7 +19,11 @@ export const Option = ({ text, path }: Props) => {
 
   useEffect(() => {
     const url = location.pathname;
-    setIsSelected(url === path);
+    if (path === "/") {
+      setIsSelected(url === path);
+    } else {
+      setIsSelected(url.startsWith(path));
+    }
   }, [location, path]);
 
   return (

@@ -7,6 +7,7 @@
   background-color: var(--background-color-light);
   border-radius: 0.5rem;
   box-shadow: var(--box-shadow-card);
+  margin-top: 10px;
 }
 
 .music-player-info-section {

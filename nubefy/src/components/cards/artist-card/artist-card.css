@@ -1,0 +1,33 @@
+.artist-card-component {
+  min-width: 300px;
+  max-width: 300px;
+  height: auto;
+  border-radius: 1rem;
+  box-shadow: var(--box-shadow-card);
+  background-color: var(--background-color-light);
+  overflow: hidden;
+}
+
+.artist-card-cover {
+  width: 100%;
+  object-fit: cover;
+}
+
+.artist-card-text-section {
+  padding: 20px 10px;
+}
+
+.artist-card-text {
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+}
+
+.artist-card-name {
+  color: var(--primary-color-normal);
+}
+
+.artist-card-genre {
+  font-size: var(--font-size-note);
+}

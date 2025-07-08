@@ -37,6 +37,7 @@
 body {
   background-color: var(--background-color-normal);
   padding: 10px;
+  height: 100dvh;
   max-height: 100dvh;
 }
 

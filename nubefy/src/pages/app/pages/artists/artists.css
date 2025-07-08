@@ -1,0 +1,8 @@
+.artists-page-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, min(300px));
+  gap: 20px;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+}
