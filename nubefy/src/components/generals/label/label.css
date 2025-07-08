@@ -1,0 +1,5 @@
+.label-component {
+  width: 100%;
+  padding: 10px;
+  color: var(--primary-color-normal);
+}

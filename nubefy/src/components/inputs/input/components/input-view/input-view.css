@@ -1,0 +1,25 @@
+.input-view-component {
+  width: 100%;
+  height: 40px;
+  overflow: hidden;
+  display: grid;
+  border: 2px solid var(--primary-color-normal);
+  border-radius: 2rem;
+}
+
+.input-view-component.is-secret {
+  grid-template-columns: auto 40px;
+}
+
+.input-view-section {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  outline: none;
+}
+
+.input-view-visible-button {
+  background: var(--primary-gradient);
+  color: var(--foreground-color-normal);
+  border: none;
+}
