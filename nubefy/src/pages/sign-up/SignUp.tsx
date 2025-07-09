@@ -4,9 +4,11 @@ import { Input } from "../../components/inputs/input/Input";
 import { useState } from "react";
 import { Button } from "../../components/buttons/button/Button";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 export function SignUp() {
   const navigate = useNavigate();
+  const {id, register, registerWithProvider } = useAuthContext();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -14,6 +16,21 @@ export function SignUp() {
 
   const handleLogIn = () => {
     navigate("/log-in");
+  };
+
+  const handleRegister = async () => {
+    await register(username, email, password);
+    if (id) navigate("/")
+  };
+
+  const handleRegisterWithGoogle = async () => {
+    await registerWithProvider("google");
+    if (id) navigate("/")
+  };
+
+  const handleRegisterWithFacebook = async () => {
+    await registerWithProvider("facebook");
+    if (id) navigate("/")
   };
 
   return (
@@ -45,9 +62,17 @@ export function SignUp() {
           />
         </div>
         <div className="sign-up-page-actions-section fccc">
-          <Button text="Sign up" />
-          <Button text="Sign up with Google" style="secondary" />
-          <Button text="Sign up with Facebook" style="secondary" />
+          <Button text="Sign up" handleClick={handleRegister} />
+          <Button
+            text="Sign up with Google"
+            style="secondary"
+            handleClick={handleRegisterWithGoogle}
+          />
+          <Button
+            text="Sign up with Facebook"
+            style="secondary"
+            handleClick={handleRegisterWithFacebook}
+          />
           <Button
             text="I have an account"
             style="link"

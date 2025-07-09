@@ -32,3 +32,8 @@
   align-items: center;
   justify-content: center;
 }
+
+.tcl {
+  width: 100%;
+  text-align: left;
+}

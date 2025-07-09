@@ -3,9 +3,12 @@ import Logo from "../../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../buttons/button/Button";
 import { Option } from "./components/option/Option";
+import { useAuthContext } from "../../../contexts/AuthContext";
+import { Profile } from "./components/profile/Profile";
 
 export const NavBarMenu = () => {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
 
   const handleHome = () => {
     navigate("/");
@@ -30,8 +33,14 @@ export const NavBarMenu = () => {
         <Option text="Artists" path="/artists" />
       </div>
       <div className="nav-bar-menu-session-actions-section frcc">
-        <Button text="Log in" style="secondary" handleClick={handleLogIn} />
-        <Button text="Sign up" handleClick={handleSignUp} />
+        {user ? (
+          <Profile />
+        ) : (
+          <>
+            <Button text="Log in" style="secondary" handleClick={handleLogIn} />
+            <Button text="Sign up" handleClick={handleSignUp} />
+          </>
+        )}
       </div>
     </header>
   );
