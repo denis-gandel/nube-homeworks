@@ -1,19 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import "./music-player.css";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { usePlayerContext } from "../../contexts/PlayerContext";
 
-interface Props {
-  music?: string;
-  artist?: string;
-  musicUrl: string;
-}
-
-export const MusicPlayer = ({
-  music = "Unnamed",
-  artist = "Unknown",
-  musicUrl,
-}: Props) => {
+export const MusicPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const {music} = usePlayerContext()
   const [isPlay, setIsPlay] = useState(false);
   const [percent, setPercent] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -64,8 +56,8 @@ export const MusicPlayer = ({
   return (
     <div className="music-player-component fccc">
       <div className="music-player-info-section">
-        <h4 className="music-player-info-music-name">{music}</h4>
-        <p className="music-player-info-artist-name">{artist}</p>
+        <h4 className="music-player-info-music-name">{music?.title}</h4>
+        <p className="music-player-info-artist-name">{music?.artistsId}</p>
       </div>
       <div className="music-player-controls-section frcc">
         <button className="fccc music-player-control music-player-back">
@@ -97,7 +89,7 @@ export const MusicPlayer = ({
         </p>
       </div>
       <audio ref={audioRef}>
-        <source src={musicUrl} type="audio/mpeg" />
+        <source src={music?.music} type="audio/mpeg" />
       </audio>
     </div>
   );
