@@ -5,13 +5,14 @@ interface Props {
   name: string;
   genre: string;
   imageUrl: string;
+  id: string;
 }
 
-export const ArtistCard = ({ name, genre, imageUrl }: Props) => {
+export const ArtistCard = ({ name, genre, imageUrl, id }: Props) => {
   const navigate = useNavigate();
 
   const handleGoArtist = () => {
-    navigate(`/artists/artist/${name}`);
+    navigate(`/artists/artist/${id}`);
   };
 
   const handleGoGenre = () => {

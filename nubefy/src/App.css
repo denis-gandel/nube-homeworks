@@ -5,8 +5,33 @@
   height: 100%;
 }
 
-/* Layouts */
+/* Pop up */
 
+.pop-up-component {
+  max-width: 800px;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--background-color-light);
+  padding: 20px;
+  border-radius: 1rem;
+  box-shadow: var(--box-shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.is-visible {
+  display: block;
+}
+
+.is-hidden {
+  display: none;
+}
+
+/* Layouts */
 
 /* Aligns */
 

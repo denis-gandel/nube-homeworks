@@ -6,9 +6,8 @@ import {
   type ReactNode,
 } from "react";
 import type { Artist, Genre, Music } from "../models/Music";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
-  getFirestore,
   collection,
   addDoc,
   getDocs,
@@ -17,6 +16,7 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import { db, storage } from "../firebase/firebase";
 
 interface Props {
   children: ReactNode;
@@ -35,19 +35,19 @@ interface Types {
     musicFile: File,
     genre: string,
     imageFile: File
-  ) => Promise<void>;
+  ) => Promise<string | undefined>;
   getMusics: (artistId?: string, genreId?: string) => Promise<void>;
   getMusicById: (id: string) => Promise<void>;
   createArtist: (
     name: string,
     genresId: Array<string>,
     imageFile: File
-  ) => Promise<void>;
+  ) => Promise<string | undefined>;
   getArtists: (genreId?: string) => Promise<void>;
   getArtist: (name?: string, id?: string) => Promise<void>;
-  createGenre: (name: string, imageFile: File) => Promise<void>;
+  createGenre: (name: string, imageFile: File) => Promise<string | undefined>;
   getGenres: () => Promise<void>;
-  getGenre: (name?: string, id?: string) => Promise<void>;
+  getGenre: (id: string) => Promise<void>;
 }
 
 export const PlayerContext = createContext<Types | undefined>(undefined);
@@ -67,9 +67,6 @@ export const PlayerProvider = ({ children }: Props) => {
     genre: string,
     imageFile: File
   ) => {
-    const storage = getStorage();
-    const db = getFirestore();
-
     try {
       const imageRef = ref(
         storage,
@@ -94,14 +91,14 @@ export const PlayerProvider = ({ children }: Props) => {
       };
 
       const musicsCollection = collection(db, "musics");
-      await addDoc(musicsCollection, newMusic);
+      const result = await addDoc(musicsCollection, newMusic);
+      return result.id;
     } catch (error) {
       console.error(error);
     }
   };
 
   const getMusics = async (artistId?: string, genreId?: string) => {
-    const db = getFirestore();
     const musicsRef = collection(db, "musics");
 
     let q;
@@ -127,7 +124,6 @@ export const PlayerProvider = ({ children }: Props) => {
   };
 
   const getMusicById = async (id: string) => {
-    const db = getFirestore();
     const musicRef = doc(db, "musics", id);
     const musicSnap = await getDoc(musicRef);
 
@@ -147,9 +143,6 @@ export const PlayerProvider = ({ children }: Props) => {
     genresId: Array<string>,
     imageFile: File
   ) => {
-    const storage = getStorage();
-    const db = getFirestore();
-
     try {
       const imageRef = ref(
         storage,
@@ -166,14 +159,14 @@ export const PlayerProvider = ({ children }: Props) => {
       };
 
       const artistsCollection = collection(db, "artists");
-      await addDoc(artistsCollection, newArtist);
+      const result = await addDoc(artistsCollection, newArtist);
+      return result.id;
     } catch (error) {
       console.error(error);
     }
   };
 
   const getArtists = async (genreId?: string) => {
-    const db = getFirestore();
     const artistsRef = collection(db, "artists");
 
     let q;
@@ -198,7 +191,6 @@ export const PlayerProvider = ({ children }: Props) => {
   };
 
   const getArtist = async (name?: string, id?: string) => {
-    const db = getFirestore();
     let artistDoc: Artist | null = null;
     let artistId: string | undefined;
 
@@ -247,9 +239,6 @@ export const PlayerProvider = ({ children }: Props) => {
   };
 
   const createGenre = async (name: string, imageFile: File) => {
-    const db = getFirestore();
-    const storage = getStorage();
-
     try {
       const imageRef = ref(
         storage,
@@ -264,15 +253,14 @@ export const PlayerProvider = ({ children }: Props) => {
       };
 
       const genresRef = collection(db, "genres");
-      await addDoc(genresRef, newGenre);
+      const result = await addDoc(genresRef, newGenre);
+      return result.id;
     } catch (error) {
-      console.error("Error creating genre:", error);
-      throw error;
+      console.error(error);
     }
   };
 
   const getGenres = async () => {
-    const db = getFirestore();
     const genresRef = collection(db, "genres");
     const querySnapshot = await getDocs(genresRef);
 
@@ -287,8 +275,7 @@ export const PlayerProvider = ({ children }: Props) => {
     setGenres(genres);
   };
 
-  const getGenre = async (name?: string, id?: string) => {
-    const db = getFirestore();
+  const getGenre = async (id: string) => {
     let genreDoc: Genre | null = null;
     let genreId: string | undefined;
 
@@ -297,17 +284,6 @@ export const PlayerProvider = ({ children }: Props) => {
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) return;
 
-      genreDoc = {
-        id: docSnap.id,
-        ...docSnap.data(),
-      } as Genre;
-      genreId = docSnap.id;
-    } else if (name) {
-      const q = query(collection(db, "genres"), where("name", "==", name));
-      const querySnap = await getDocs(q);
-      if (querySnap.empty) return;
-
-      const docSnap = querySnap.docs[0];
       genreDoc = {
         id: docSnap.id,
         ...docSnap.data(),

@@ -6,6 +6,7 @@ import {
   getAuth,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDOZaZOblcCB1qAX0leo45NtGvMkHhpeWc",
@@ -26,3 +27,4 @@ export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
 
 export const db = getFirestore(app, "nubefy");
+export const storage = getStorage(app)

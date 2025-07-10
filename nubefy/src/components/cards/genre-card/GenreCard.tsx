@@ -4,13 +4,14 @@ import "./genre-card.css";
 interface Props {
   imageUrl: string;
   name: string;
+  id: string;
 }
 
-export const GenreCard = ({ imageUrl, name }: Props) => {
+export const GenreCard = ({ imageUrl, name, id }: Props) => {
   const navigate = useNavigate();
 
   const handleGo = () => {
-    navigate(`/genres/genre/${name}`);
+    navigate(`/genres/genre/${id}`);
   };
 
   return (

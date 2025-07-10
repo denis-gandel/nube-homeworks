@@ -2,7 +2,7 @@ import "./label.css";
 
 interface Props {
   text: string;
-  htmlFor: string;
+  htmlFor?: string;
 }
 
 export const Label = ({ text, htmlFor }: Props) => {

@@ -6,18 +6,21 @@ import { SignUp } from "./pages/sign-up/SignUp";
 import { AppRoutes } from "./pages/app/AppRoutes";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PlayerProvider } from "./contexts/PlayerContext";
+import { PopUpProvider } from "./contexts/PopUpContext";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <PlayerProvider>
-          <NavBarMenu />
-          <Routes>
-            <Route path="/*" element={<AppRoutes />} />
-            <Route path="/log-in" element={<LogIn />} />
-            <Route path="/sign-up" element={<SignUp />} />
-          </Routes>
+          <PopUpProvider>
+            <NavBarMenu />
+            <Routes>
+              <Route path="/*" element={<AppRoutes />} />
+              <Route path="/log-in" element={<LogIn />} />
+              <Route path="/sign-up" element={<SignUp />} />
+            </Routes>
+          </PopUpProvider>
         </PlayerProvider>
       </AuthProvider>
     </BrowserRouter>

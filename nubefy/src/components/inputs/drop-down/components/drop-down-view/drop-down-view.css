@@ -1,0 +1,30 @@
+.drop-down-view-value-component {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  color: var(--primary-color-normal);
+  border-radius: 10px;
+  border: 2px solid var(--primary-color-normal);
+  background-color: transparent;
+}
+
+.drop-down-view-options-component {
+  width: 100%;
+  border-radius: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 300px;
+}
+
+.drop-down-view-option {
+  width: 100%;
+  text-align: left;
+  padding: 10px 20px;
+  background-color: var(--background-color-normal);
+  border: none;
+}
+
+.drop-down-view-option.is-selected {
+  background-color: var(--primary-color-normal);
+  color: var(--foreground-color-normal);
+}
