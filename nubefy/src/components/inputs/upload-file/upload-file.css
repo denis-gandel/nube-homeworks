@@ -1,0 +1,18 @@
+.upload-file-component {
+  width: 100%;
+}
+
+.upload-file-selected-file {
+  width: 100%;
+  background-color: var(--primary-color-normal);
+  color: var(--foreground-color-normal);
+  border-radius: .5rem;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.upload-file-delete-file {
+  background-color: transparent;
+  color: var(--foreground-color-normal);
+  border: none;
+}

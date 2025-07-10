@@ -1,0 +1,18 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.home-page-sections {
+  padding: 10px;
+}
+
+.home-components {
+  display: flex;
+  flex-direction: row;
+  overflow-y: hidden;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 10px;
+}

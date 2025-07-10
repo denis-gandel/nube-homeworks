@@ -1,0 +1,59 @@
+.music-player-component {
+  width: 100%;
+  position: sticky;
+  bottom: 10px;
+  left: 10px;
+  padding: 20px;
+  background-color: var(--background-color-light);
+  border-radius: 0.5rem;
+  box-shadow: var(--box-shadow-card);
+  margin-top: 10px;
+}
+
+.music-player-info-section {
+  width: 100%;
+}
+
+.music-player-controls-section {
+  gap: 10px;
+}
+
+.music-player-control {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  color: var(--primary-color-normal);
+}
+
+.music-player-main-control {
+  width: 60px;
+  height: 60px;
+  background: var(--primary-gradient);
+  color: var(--foreground-color-light);
+  border: none;
+  border-radius: 50%;
+}
+
+.music-player-range-section {
+  gap: 20px;
+  width: 100%;
+}
+
+.music-player-range {
+  width: 100%;
+  height: 6px;
+  appearance: none;
+  background: var(--background-color-dark);
+  border-radius: 5px;
+  overflow: hidd;
+}
+
+.music-player-range-time-text {
+  color: var(--primary-color-light);
+}
+
+.music-player-range-slider {
+  height: 100%;
+  background-color: var(--primary-color-normal);
+}

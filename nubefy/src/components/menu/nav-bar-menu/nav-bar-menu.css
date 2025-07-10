@@ -1,0 +1,63 @@
+.nav-bar-menu-component {
+  width: 100%;
+  position: sticky;
+  top: 10px;
+  left: 10px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: var(--background-color-light);
+  border-radius: 0.5rem;
+  box-shadow: var(--box-shadow-card);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nav-bar-menu-logo-section {
+  width: auto;
+  height: 40px;
+  background-color: transparent;
+  border: none;
+}
+
+.nav-bar-menu-logo {
+  width: 100%;
+  height: 100%;
+}
+
+.nav-bar-menu-actions-section {
+  gap: 20px;
+}
+
+.nav-bar-menu-session-actions-section {
+  gap: 10px;
+}
+
+.nav-bar-menu-options-sections {
+  gap: 10px;
+}
+
+@media (max-width: 760px) {
+  .nav-bar-menu-component {
+    display: grid;
+    grid-template-columns: 60px auto;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-areas:
+      "logo session"
+      "options options";
+  }
+
+  .nav-bar-menu-logo-section {
+    grid-area: logo;
+  }
+
+  .nav-bar-menu-session-actions-section {
+    grid-area: session;
+  }
+
+  .nav-bar-menu-options-sections {
+    grid-area: options;
+  }
+}
