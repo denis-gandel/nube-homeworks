@@ -3,20 +3,15 @@ import "./artist-card.css";
 
 interface Props {
   name: string;
-  genre: string;
   imageUrl: string;
   id: string;
 }
 
-export const ArtistCard = ({ name, genre, imageUrl, id }: Props) => {
+export const ArtistCard = ({ name, imageUrl, id }: Props) => {
   const navigate = useNavigate();
 
   const handleGoArtist = () => {
     navigate(`/artists/artist/${id}`);
-  };
-
-  const handleGoGenre = () => {
-    navigate(`/genres/genre/${genre}`);
   };
 
   return (
@@ -28,12 +23,6 @@ export const ArtistCard = ({ name, genre, imageUrl, id }: Props) => {
           onClick={handleGoArtist}
         >
           {name}
-        </button>
-        <button
-          className="artist-card-genre artist-card-text"
-          onClick={handleGoGenre}
-        >
-          {genre}
         </button>
       </div>
     </div>

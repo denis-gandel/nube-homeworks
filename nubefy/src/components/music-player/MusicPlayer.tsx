@@ -5,7 +5,8 @@ import { usePlayerContext } from "../../contexts/PlayerContext";
 
 export const MusicPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const {music} = usePlayerContext()
+  const { music, handleNextMusic, handlePreviousMusic } = usePlayerContext();
+  const [artist, setArtist] = useState("Unknown");
   const [isPlay, setIsPlay] = useState(false);
   const [percent, setPercent] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -57,10 +58,13 @@ export const MusicPlayer = () => {
     <div className="music-player-component fccc">
       <div className="music-player-info-section">
         <h4 className="music-player-info-music-name">{music?.title}</h4>
-        <p className="music-player-info-artist-name">{music?.artistsId}</p>
+        <p className="music-player-info-artist-name">{artist}</p>
       </div>
       <div className="music-player-controls-section frcc">
-        <button className="fccc music-player-control music-player-back">
+        <button
+          className="fccc music-player-control music-player-back"
+          onClick={handlePreviousMusic}
+        >
           <SkipBack />
         </button>
         <button className="fccc music-player-main-control" onClick={togglePlay}>
@@ -70,7 +74,10 @@ export const MusicPlayer = () => {
             <Play strokeWidth={0} fill="var(--foreground-color-light)" />
           )}
         </button>
-        <button className="fccc music-player-control music-player-next">
+        <button
+          className="fccc music-player-control music-player-next"
+          onClick={handleNextMusic}
+        >
           <SkipForward />
         </button>
       </div>

@@ -5,10 +5,12 @@ import "./genres.css";
 import { Button } from "../../../../../../components/buttons/button/Button";
 import { usePopUpContext } from "../../../../../../contexts/PopUpContext";
 import { CreateGenrePopUp } from "../../../../../../components/pop-up/create-genre-pop-up/CreateGenrePopUp";
+import { useAuthContext } from "../../../../../../contexts/AuthContext";
 
 export function Genres() {
   const { getGenres, genres } = usePlayerContext();
   const { setPopUp } = usePopUpContext();
+  const { user } = useAuthContext();
 
   const handleCreateGenre = () => {
     setPopUp(<CreateGenrePopUp />);
@@ -22,7 +24,9 @@ export function Genres() {
     <div className="genres-page page">
       <div className="genres-page-header frcb">
         <h1>Genres</h1>
-        <Button text="Create genre" handleClick={handleCreateGenre} />
+        {user && user.role === "admin" && (
+          <Button text="Create genre" handleClick={handleCreateGenre} />
+        )}
       </div>
       <div className="genres-page-section">
         {genres && genres.length > 0 ? (

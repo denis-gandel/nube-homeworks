@@ -1,6 +1,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -44,10 +45,13 @@ interface Types {
     imageFile: File
   ) => Promise<string | undefined>;
   getArtists: (genreId?: string) => Promise<void>;
-  getArtist: (name?: string, id?: string) => Promise<void>;
+  getArtist: (id: string) => Promise<void>;
   createGenre: (name: string, imageFile: File) => Promise<string | undefined>;
   getGenres: () => Promise<void>;
   getGenre: (id: string) => Promise<void>;
+  setSelectedMusic: (value: number) => void;
+  handleNextMusic: () => void;
+  handlePreviousMusic: () => void;
 }
 
 export const PlayerContext = createContext<Types | undefined>(undefined);
@@ -59,6 +63,7 @@ export const PlayerProvider = ({ children }: Props) => {
   const [artist, setArtist] = useState<Artist | undefined>(undefined);
   const [genres, setGenres] = useState<Array<Genre>>([]);
   const [genre, setGenre] = useState<Genre | undefined>(undefined);
+  const [selectedMusic, setSelectedMusic] = useState(-1);
 
   const createMusic = async (
     title: string,
@@ -190,7 +195,7 @@ export const PlayerProvider = ({ children }: Props) => {
     setArtists(artists);
   };
 
-  const getArtist = async (name?: string, id?: string) => {
+  const getArtist = async (id: string) => {
     let artistDoc: Artist | null = null;
     let artistId: string | undefined;
 
@@ -199,17 +204,6 @@ export const PlayerProvider = ({ children }: Props) => {
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) return;
 
-      artistDoc = {
-        id: docSnap.id,
-        ...docSnap.data(),
-      } as Artist;
-      artistId = docSnap.id;
-    } else if (name) {
-      const q = query(collection(db, "artists"), where("name", "==", name));
-      const querySnap = await getDocs(q);
-      if (querySnap.empty) return;
-
-      const docSnap = querySnap.docs[0];
       artistDoc = {
         id: docSnap.id,
         ...docSnap.data(),
@@ -312,6 +306,38 @@ export const PlayerProvider = ({ children }: Props) => {
     setArtists(artists);
   };
 
+  const handleNextMusic = () => {
+    if (musics.length === 0) {
+      setSelectedMusic(-1);
+      return;
+    }
+
+    setSelectedMusic((prev) => {
+      const nextIndex = prev + 1;
+      return nextIndex < musics.length ? nextIndex : 0;
+    });
+  };
+
+  const handlePreviousMusic = () => {
+    if (musics.length === 0) {
+      setSelectedMusic(-1);
+      return;
+    }
+
+    setSelectedMusic((prev) => {
+      const prevIndex = prev - 1;
+      return prevIndex >= 0 ? prevIndex : musics.length - 1;
+    });
+  };
+
+  useEffect(() => {
+    if (selectedMusic > -1 && musics.length > 0) {
+      setMusic(musics[selectedMusic]);
+    } else {
+      setMusic(undefined);
+    }
+  }, [selectedMusic, musics]);
+
   const values = useMemo(
     () => ({
       musics,
@@ -329,8 +355,11 @@ export const PlayerProvider = ({ children }: Props) => {
       createGenre,
       getGenres,
       getGenre,
+      setSelectedMusic,
+      handleNextMusic,
+      handlePreviousMusic,
     }),
-    [musics, music, artists, artist, genres, genre]
+    [musics, music, artists, artist, genres, genre, selectedMusic]
   );
 
   return (

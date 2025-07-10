@@ -6,11 +6,13 @@ import { Button } from "../../../../../../components/buttons/button/Button";
 import { usePopUpContext } from "../../../../../../contexts/PopUpContext";
 import { ArtistCard } from "../../../../../../components/cards/artist-card/ArtistCard";
 import { CreateArtistPopUp } from "../../../../../../components/pop-up/create-artist-pop-up/CreateArtistPopUp";
+import { useAuthContext } from "../../../../../../contexts/AuthContext";
 
 export function Genre() {
   const { id } = useParams();
   const { getGenre, genre, artists } = usePlayerContext();
   const { setPopUp } = usePopUpContext();
+  const { user } = useAuthContext();
 
   const handleAddArtist = () => setPopUp(<CreateArtistPopUp />);
 
@@ -29,7 +31,9 @@ export function Genre() {
         </div>
       </div>
       <div className="genre-page-actions">
-        <Button text="Add artist" handleClick={handleAddArtist} />
+        {user && user.role === "admin" && (
+          <Button text="Add artist" handleClick={handleAddArtist} />
+        )}
       </div>
       <div className="genre-page-artists">
         {artists && artists.length > 0 ? (
@@ -37,7 +41,6 @@ export function Genre() {
             <ArtistCard
               key={artist.id}
               name={artist.name}
-              genre={genre?.name ?? ""}
               imageUrl={artist.imageUrl}
               id={artist.id ?? ""}
             />
